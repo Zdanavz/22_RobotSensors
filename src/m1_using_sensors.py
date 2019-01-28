@@ -3,21 +3,21 @@ This module lets you practice the use of robot sensors.
 
 Authors: David Mutchler, Vibha Alangar, Matt Boutell, Dave Fisher,
          Mark Hays, Amanda Stouder, Aaron Wilkin, their colleagues,
-         and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         and ZZ.
+"""  # Done: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import ev3dev.ev3 as ev3
 import time
 import math
 
-# -----------------------------------------------------------------------------
-# TODO 2:  With your instructor, do quiz questions 1 through 5.
+# --------------------------------------------------------------------------
+# Done 2:  With your instructor, do quiz questions 1 through 5.
 #          After you understand the answers to those questions,
 #          mark this _TODO_ as DONE.
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-# TODO 3:  With your instructor, do quiz questions 6 through XXX.
+# Done 3:  With your instructor, do quiz questions 6 through XXX.
 #          After you understand the answers to those questions,
 #          mark this _TODO_ as DONE.
 # -----------------------------------------------------------------------------
@@ -25,10 +25,10 @@ import math
 def main():
     """ Calls the testing functions. """
     # Un-comment out these tests as you implement the methods they test.
-    # run_test_beep_and_tone()
+    #run_test_beep_and_tone()
     # run_test_go_straight_for_seconds()
     # run_test_go_straight_for_inches_using_time()
-    # run_test_go_straight_for_inches_using_sensor()
+    #run_test_go_straight_for_inches_using_sensor()
     # run_test_raise_arm()
     # run_test_lower_arm()
     # run_test_go_straight_until_black()
@@ -43,7 +43,7 @@ def run_test_beep_and_tone():
        -- tone method of the ToneMaker class
     """
     # -------------------------------------------------------------------------
-    # TODO: 4.  Implement and test this method.
+    # Done: 4.  Implement and test this method.
     # -------------------------------------------------------------------------
     # IMPORTANT:
     #   For testing the   beep   method,
@@ -58,9 +58,17 @@ def run_test_beep_and_tone():
     #   Do not forget to apply the   wait   method to tone, as usual.
     # -------------------------------------------------------------------------
 
+    b = Beeper()
+    for _ in range(10):
+        b.beep().wait()
+        time.sleep(1)
+    t=ToneMaker()
+    for k in range(10):
+        t.tone(100+10*k,50).wait()
+
 
 # -----------------------------------------------------------------------------
-# TODO 5:  With your instructor, do quiz questions XXX through XXX.
+# Done 5:  With your instructor, do quiz questions XXX through XXX.
 #          After you understand the answers to those questions,
 #          mark this _TODO_ as DONE.
 # -----------------------------------------------------------------------------
@@ -95,8 +103,8 @@ def run_test_go_straight_for_seconds():
     input('Press the ENTER key to continue.')
     beeper.beep()
     drive_system.go_straight_for_seconds(2.5, -50)
-    # -------------------------------------------------------------------------
-    # TODO: 6.  Run the above tests.  Be sure to understand the
+    # ----------------------------------------------------------------------
+    # Done: 6.  Run the above tests.  Be sure to understand the
     #              go_straight_for_seconds   method of   DriveSystem.
     # -------------------------------------------------------------------------
 
@@ -131,13 +139,13 @@ def run_test_go_straight_for_inches_using_time():
     beeper.beep()
     drive_system.go_straight_for_inches_using_time(12, -50)
     # -------------------------------------------------------------------------
-    # TODO: 7.  Run the above tests.  Be sure to understand the
+    # Done: 7.  Run the above tests.  Be sure to understand the
     #              go_straight_for_inches_using_time   method of   DriveSystem.
     # -------------------------------------------------------------------------
 
 
 # -----------------------------------------------------------------------------
-# TODO 8:  With your instructor, do quiz questions XXX through XXX.
+# Done 8:  With your instructor, do quiz questions XXX through XXX.
 #          After you understand the answers to those questions,
 #          mark this _TODO_ as DONE.
 # -----------------------------------------------------------------------------
@@ -173,14 +181,14 @@ def run_test_go_straight_for_inches_using_sensor():
     drive_system.go_straight_for_inches_using_sensor(12, -50)
 
     # -------------------------------------------------------------------------
-    # TODO: 9.  With your instructor, implement the
+    # Done: 9.  With your instructor, implement the
     #      go_straight_for_inches_using_sensor    method of   DriveSystem.
     #      The tests are already written for you -- READ THEM (above).
     # -------------------------------------------------------------------------
 
 
 # -----------------------------------------------------------------------------
-# TODO 10:  With your instructor, do quiz questions XXX through XXX.
+# Done 10:  With your instructor, do quiz questions XXX through XXX.
 #          After you understand the answers to those questions,
 #          mark this _TODO_ as DONE.
 # -----------------------------------------------------------------------------
@@ -355,7 +363,13 @@ class DriveSystem(object):
         self.go_straight_for_seconds(seconds, speed)
 
     def go_straight_for_inches_using_sensor(self, inches, speed):
-        pass
+        inches_per_degree=self.left_motor.WheelCircumference/360
+        self.left_motor.reset_position()
+        self.go(speed,speed)
+        while True:
+            if abs(inches_per_degree*self.left_motor.get_position()) >= inches:
+                self.stop()
+                break
         # Live code this with students
 
     def go_straight_until_black(self, speed):
@@ -379,6 +393,16 @@ class DriveSystem(object):
         stopping when the touch sensor is pressed.
         """
         pass
+
+class ArmAndClaw(object):
+
+    def __init__(self):
+        self.arm_motor=Motor('C')
+
+    def raise_arm(self):
+        self.arm_motor.turn_on(100)
+        
+
 
 
 ###############################################################################
